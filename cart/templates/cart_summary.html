@@ -61,6 +61,9 @@
                   <button type="button" data-index="{{ product.id }}" class="btn btn-primary update-cart">
                       Update
                   </button>
+                  <button type="button" data-index="{{ product.id }}" class="btn btn-danger delete-product">
+                      Remove
+                  </button>
                 </div>
               </div>
             </div>
@@ -102,6 +105,26 @@
             data: {
                 product_id: $(this).data('index'),
                 product_qty: $('#select' + productid + " option:selected").text(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(json){
+                location.reload();
+            },
+            error: function(xhr, errmsg, err){
+                // Handle error
+            }
+        });
+    });
+
+    $(document).on('click', '.delete-product', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'cart_delete' %}',
+            data: {
+                product_id: $(this).data('index'),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
