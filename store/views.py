@@ -3,9 +3,7 @@ from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm
-from django import forms
 
 
 def home(request):
