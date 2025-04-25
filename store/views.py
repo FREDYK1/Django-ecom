@@ -3,7 +3,7 @@ from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import SignUpForm, UpdateUserForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 
 def home(request):
@@ -78,6 +78,26 @@ def update_user(request):
             messages.success(request, "Your Profile has been updated successfully")
             return redirect("home")
         return render(request, "update_user.html", {"user_form": user_form})
+    else:
+        messages.error(request, "You need to be logged in to update your profile")
+        return redirect("login")
+
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        form = ChangePasswordForm(current_user, request.POST)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Your Password has been updated successfully, Please Log In Again")
+                login(request, current_user)
+                return redirect("home")
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                    return redirect("update_password")
+        else:
+            return render(request, "update_password.html", {"form": form})
     else:
         messages.error(request, "You need to be logged in to update your profile")
         return redirect("login")
