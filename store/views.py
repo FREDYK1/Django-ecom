@@ -124,7 +124,6 @@ def search(request):
         if not searched_products:
             messages.error(request, "No products found matching your search. Please try again.")
             return render(request, "search.html", {})
-
         else:
             messages.success(request, f"Found {searched_products.count()} product(s) matching your search.")
             return render(request, "search.html", {'searched_products': searched_products})
