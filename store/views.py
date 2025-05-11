@@ -23,7 +23,6 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-
             current_user = Profile.objects.get(user__id=request.user.id)
             saved_cart = current_user.old_cart
             if saved_cart:
